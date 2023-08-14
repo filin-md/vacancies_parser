@@ -1,13 +1,21 @@
 import requests
 
-def get_hh_data(url):
-    response = requests.get(url)
-    return response.json()
+from dbmanager import DBManager
+
+
+def get_hh_data(list_ids:list, db:DBManager) -> None:
+    """Получаем список и объект базы данных и вставляем в базу данных данные поллученные по api"""
+
+    for employer_id in list_ids:
+        url = f'https://api.hh.ru/vacancies?employer_id={employer_id}&per_page=50'
+        data = requests.get(url).json()
+        insert_data_into_db(data, db)
 
 
 
 
-def insert_data_into_db(data, db):
+def insert_data_into_db(data: list[dict], db: DBManager) -> None:
+    """Полученные данные из api распаковываем и кладём в базу данных"""
     for item in data['items']:
         employer_id = item['employer']['id']
         employer_name = item['employer']['name']

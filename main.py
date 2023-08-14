@@ -22,13 +22,12 @@ if __name__ == '__main__':
                     2000762 #IT Space
                      ]
 
-    for employer_id in employers_ids:
-        url = f'https://api.hh.ru/vacancies?employer_id={employer_id}&per_page=50'
-        data = get_hh_data(url)
-        insert_data_into_db(data, db)
+    get_hh_data(employers_ids, db)
 
     print(db.get_companies_and_vacansies_count())
     print(db.get_all_vacansies())
     print(db.get_avg_salary())
     print(db.get_vacansies_with_higer_salary())
     print(db.get_vacancies_with_keyword('python'))
+
+    db.close()
